@@ -2,8 +2,8 @@ import requests, json
 
 # API Document [ https://www.vultr.com/api/#api_name ]
 
-# API enumeration script
 """
+// API argument generator for register_methods (JavaScript for Chrome Console)
 var h3s = document.getElementsByTagName("h3");
 var result = [];
 for(var i=0; i<h3s.length; i++) {
@@ -14,12 +14,12 @@ for(var i=0; i<h3s.length; i++) {
     {
         if (e.innerText.indexOf("GET")>0)
         {
-            result.push("\"G " + f + "\"");
+            result.push("            \"G " + f + "\"");
             break;
         }
         if (e.innerText.indexOf("POST")>0)
         {
-            result.push("\"P " + f + "\"");
+            result.push("            \"P " + f + "\"");
             break;
         }
         e = e.nextElementSibling;
@@ -182,9 +182,10 @@ class API():
 
     def _dictify(self, res):
         ok = (res.status_code == requests.codes.ok)
-        j = { "_error": not ok, "_status_code": res.status_code }
         if ok and res.text != "":
-          j.update(json.loads(res.text, encoding = res.encoding))
+          j = json.loads(res.text, encoding = res.encoding)
+        else:
+          j = { "_error": not ok, "_status_code": res.status_code }
         return j
 
     def _get(self, path, **k):

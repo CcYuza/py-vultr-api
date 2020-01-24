@@ -1,9 +1,13 @@
 import requests, json
 
-# API Document [ https://www.vultr.com/api/#api_name ]
+# To learn about arguments of REST APIs, see the document:
+#  [ https://www.vultr.com/api/#api_name ]
 
 """
-// API argument generator for register_methods (JavaScript for Chrome Console)
+//
+// Argument generator for register_methods
+// Run following script in Chrome Console at https://www.vultr.com/api
+//
 var h3s = document.getElementsByTagName("h3");
 var result = [];
 for(var i=0; i<h3s.length; i++) {
@@ -86,6 +90,22 @@ class API():
             "P iso/destroy",
             "G iso/list",
             "G iso/list_public",
+            "G loadbalancer/conf_info",
+            "P loadbalancer/create",
+            "P loadbalancer/destroy",
+            "P loadbalancer/forward_rule_create",
+            "P loadbalancer/forward_rule_delete",
+            "G loadbalancer/forward_rule_list",
+            "G loadbalancer/generic_info",
+            "P loadbalancer/generic_update",
+            "G loadbalancer/health_check_info",
+            "P loadbalancer/health_check_update",
+            "P loadbalancer/instance_attach",
+            "P loadbalancer/instance_detach",
+            "G loadbalancer/instance_list",
+            "P loadbalancer/label_set",
+            "G loadbalancer/list",
+            "G loadbalancer/ssl_info",
             "P network/create",
             "P network/destroy",
             "G network/list",
@@ -197,16 +217,21 @@ class API():
 
 # some test cases
 if __name__ == "__main__":
+    # initialize
     api = API("YOUR_API_KEY")
+
+    # enumerate
+    print("Supported functions:")
+    for v in dir(api):
+    	if not v.startswith('_'): print('\t' + v)
 
     # public APIs
     print(json.dumps(api.os_list(), indent=2))
     print(json.dumps(api.regions_list(), indent=2))
-
-    # needs valid API key
-    print(json.dumps(api.server_list(), indent=2))
     print(json.dumps(api.plans_list(type="vc2"), indent=2))
     print(json.dumps(api.regions_availability(DCID=1), indent=2))
 
-    # WARNING: this command changes your server's tag!
+    # private APIs, needs valid API key
+    print(json.dumps(api.user_list(), indent=2))
+    print(json.dumps(api.server_list(), indent=2))
     print(json.dumps(api.server_tag_set(SUBID="YOUR_SUBSCRIPTION_ID", tag="tag-test"), indent=2))
